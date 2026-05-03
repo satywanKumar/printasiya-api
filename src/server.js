@@ -40,7 +40,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // Serve frontend build from backend
-const buildPath = path.join(__dirname, '..', 'build');
+const buildPath = path.join(__dirname, 'build');
 app.use(express.static(buildPath));
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api/')) {
