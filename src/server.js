@@ -1,5 +1,6 @@
 require('dotenv').config();
 require('express-async-errors');
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/database');
@@ -38,6 +39,16 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'Server is running' });
 });
 
+// Serve frontend build from backend
+const buildPath = path.join(__dirname, '..', '..', 'frontend', 'build');
+app.use(express.static(buildPath));
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api/')) {
+    return next();
+  }
+  res.sendFile(path.join(buildPath, 'index.html'));
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('🔴 Error occurred:', err);
@@ -48,14 +59,6 @@ app.use((err, req, res, next) => {
     success: false,
     message: err.message || 'Internal Server Error',
     error: process.env.NODE_ENV === 'development' ? err : {}
-  });
-});
-
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    message: 'Route not found'
   });
 });
 
