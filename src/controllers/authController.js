@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'sk@112233';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 // Generate JWT Token
 const generateToken = (adminId) => {
