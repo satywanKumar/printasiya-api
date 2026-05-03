@@ -15,7 +15,7 @@ connectDB();
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : ['http://localhost:3000', 'http://localhost:5000'],
   credentials: true
 }));
 app.use(express.json());
@@ -40,7 +40,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // Serve frontend build from backend
-const buildPath = path.join(__dirname, '..', '..', 'frontend', 'build');
+const buildPath = path.join(__dirname, '..', 'build');
 app.use(express.static(buildPath));
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api/')) {
